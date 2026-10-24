@@ -1,0 +1,36 @@
+CONCLUSIONES - EJERCICIO 2:
+
+HALLAZGOS
+
+1. El flujo completo sobre /user se ejecuto con exito: crear, buscar,
+   actualizar, buscar el actualizado, eliminar y verificar que ya no existe. 
+   Resultado final: 1 escenario, 0 fallos.
+
+2. El POST y el PUT responden status 200 con un JSON de tipo "unknown" cuyo
+   campo message contiene un numero. No devuelven el objeto del usuario, por
+   lo que hay que hacer un GET para comprobar el resultado.
+
+3. Al enviar "id": 0 en el cuerpo del PUT, la API respondio 200 pero el
+   usuario no se actualizo: los GET siguientes (con reintentos) devolvian el
+   nombre y el correo originales, y el message del PUT traia un id distinto
+   al del POST. Parece que el servidor trato la peticion como un registro
+   nuevo en lugar de actualizar el existente.
+
+4. Al enviar en el PUT el id real del usuario (obtenido con el GET), la
+   actualizacion de nombre y correo si se reflejo en la busqueda posterior.
+
+5. Tras el DELETE, el GET del mismo usuario responde 404, lo que confirma que
+   el usuario fue eliminado.
+
+6. La API es publica y compartida, por lo que se uso un username unico
+   (basado en la hora actual) para evitar choques con otros datos.
+
+CONCLUSIONES
+
+- Un status 200 no garantiza que la operacion se haya aplicado: es necesario
+  validar con un GET posterior que los datos realmente cambiaron.
+- Para que el PUT actualice el usuario correcto, el cuerpo debe incluir el id
+  real del recurso y no un valor por defecto.
+- El flujo completo (crear, buscar, actualizar, buscar, eliminar y verificar)
+  quedo automatizado y es repetible, gracias a un username unico por
+  ejecucion y a variables reutilizadas entre pasos.
